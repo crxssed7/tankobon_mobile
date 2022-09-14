@@ -5,7 +5,7 @@ class GradientAppBar extends StatelessWidget with PreferredSizeWidget {
 
   final Gradient gradient;
   final Widget? title;
-  final Widget leading;
+  final Widget? leading;
   final double barHeight;
   final List<Widget>? actions;
 
@@ -17,7 +17,7 @@ class GradientAppBar extends StatelessWidget with PreferredSizeWidget {
       ]),
       this.actions,
       this.title,
-      required this.leading,
+      this.leading,
       this.barHeight = _defaultHeight});
 
   @override

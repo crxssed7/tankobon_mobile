@@ -32,4 +32,21 @@ abstract class TankobonClient {
       throw Exception("Could not retrieve manga");
     }
   }
+
+  static Future<List<Volume>> getVolumes(int mangaID) async {
+    var uri = Uri.parse(baseUrl);
+
+    uri = uri.replace(
+      path: 'api/manga/$mangaID/volumes/',
+    );
+
+    var response = await http.get(uri);
+    if (response.statusCode == 200) {
+      var map = json.decode(response.body);
+      var obj = Volume.fromJsonList(map);
+      return obj;
+    } else {
+      throw Exception("Could not retrieve volumes");
+    }
+  }
 }

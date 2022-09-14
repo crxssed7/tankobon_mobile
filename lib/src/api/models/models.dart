@@ -72,6 +72,15 @@ class Volume {
     poster = json['poster'];
     chapters = json['chapters'].cast<String>();
   }
+
+  static List<Volume> fromJsonList(List<dynamic> json) {
+    var results = <Volume>[];
+    for (var j in json) {
+      var r = Volume.fromJson(j);
+      results.add(r);
+    }
+    return results;
+  }
 }
 
 class Results {

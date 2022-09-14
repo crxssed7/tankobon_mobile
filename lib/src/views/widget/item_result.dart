@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:tankobon_mobile/src/api/models/models.dart';
-// import 'package:tankobon_mobile/src/views/activity/item.dart';
+import 'package:tankobon_mobile/src/views/activity/item.dart';
 // import 'package:tankobon_mobile/src/views/activity/reader.dart';
 
 class ItemResult extends StatelessWidget {
@@ -20,6 +20,12 @@ class ItemResult extends StatelessWidget {
         splashColor: const Color.fromARGB(255, 82, 218, 171),
         onTap: () {
           // Get the item details
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ItemActivity(item),
+            ),
+          );
         },
         child: Stack(
           fit: StackFit.expand,
@@ -33,16 +39,7 @@ class ItemResult extends StatelessWidget {
               child: CachedNetworkImage(
                 imageUrl: item.poster ?? '',
                 progressIndicatorBuilder: (context, url, downloadProgress) =>
-                    Center(
-                  child: CachedNetworkImage(
-                    imageUrl: item.poster ?? '',
-                    placeholder: (context, url) =>
-                        const CircularProgressIndicator(
-                          color: Color.fromARGB(255, 82, 218, 171),
-                        ),
-                    errorWidget: (context, url, error) => const Icon(Icons.error),
-                  ),
-                ),
+                    Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
                 errorWidget: (context, url, error) => const Icon(Icons.error),
                 fit: BoxFit.cover,
               ),
