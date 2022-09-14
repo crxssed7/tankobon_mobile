@@ -6,7 +6,7 @@ import 'package:tankobon_mobile/src/api/models/models.dart';
 abstract class TankobonClient {
   static String baseUrl = "https://tankobon.fly.dev/";
 
-  static Future<Results> getManga({String? query}) async {
+  static Future<Results> getManga({String? query, String sort = 'last_updated', int offset = 0, int limit = 8}) async {
     var uri = Uri.parse(baseUrl);
     Map<String, dynamic> queryParams = {};
 
@@ -14,11 +14,15 @@ abstract class TankobonClient {
       queryParams.addAll({'q': query});
     }
 
+    queryParams.addAll({'sort': sort});
+    queryParams.addAll({'offset': offset.toString()});
+    queryParams.addAll({'limit': limit.toString()});
+
     uri = uri.replace(
       path: 'api/manga/',
       queryParameters: queryParams
     );
-    
+
     var response = await http.get(uri);
     if (response.statusCode == 200) {
       var map = json.decode(response.body);

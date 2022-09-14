@@ -30,7 +30,7 @@ class _HomePageState extends State<HomePage> {
         fontFamily: 'Montserrat',
         colorScheme: const ColorScheme(
           brightness: Brightness.dark,
-          primary: Colors.black,
+          primary: Color.fromARGB(255, 82, 185, 185),
           onPrimary: Colors.white,
           secondary: Colors.white,
           onSecondary: Colors.black,
