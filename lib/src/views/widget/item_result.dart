@@ -3,7 +3,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:tankobon_mobile/src/api/models/models.dart';
 import 'package:tankobon_mobile/src/views/activity/item.dart';
-// import 'package:tankobon_mobile/src/views/activity/reader.dart';
 
 class ItemResult extends StatelessWidget {
   final Manga item;
