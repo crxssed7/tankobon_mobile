@@ -26,52 +26,56 @@ class ItemResult extends StatelessWidget {
             ),
           );
         },
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            Card(
-              elevation: 0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              clipBehavior: Clip.antiAlias,
-              child: CachedNetworkImage(
-                imageUrl: item.poster ?? '',
-                progressIndicatorBuilder: (context, url, downloadProgress) =>
-                    Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
-                errorWidget: (context, url, error) => const Icon(Icons.error),
-                fit: BoxFit.cover,
-              ),
-            ),
-            Container(
-              height: 200,
-              width: double.infinity,
-              margin: const EdgeInsets.all(3.5),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [
-                    Color.fromARGB(0, 0, 0, 0),
-                    Color.fromARGB(175, 0, 0, 0),
-                  ],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  stops: [0, 1],
+        child: SizedBox(
+          width: double.infinity,
+          height: 175,
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              Card(
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                borderRadius: BorderRadius.circular(10),
+                clipBehavior: Clip.antiAlias,
+                child: CachedNetworkImage(
+                  imageUrl: item.banner ?? '',
+                  progressIndicatorBuilder: (context, url, downloadProgress) =>
+                      Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
+                  fit: BoxFit.cover,
+                ),
               ),
-              alignment: AlignmentDirectional.bottomStart,
-              child: Padding(
-                padding: const EdgeInsets.all(15),
-                child: Text(
-                  item.name ?? '',
-                  style: const TextStyle(
-                    overflow: TextOverflow.ellipsis,
-                    color: Colors.white,
+              Container(
+                height: 200,
+                width: double.infinity,
+                margin: const EdgeInsets.all(3.5),
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [
+                      Color.fromARGB(0, 0, 0, 0),
+                      Color.fromARGB(175, 0, 0, 0),
+                    ],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    stops: [0, 1],
+                  ),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                alignment: AlignmentDirectional.bottomStart,
+                child: Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: Text(
+                    item.name ?? '',
+                    style: const TextStyle(
+                      overflow: TextOverflow.ellipsis,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

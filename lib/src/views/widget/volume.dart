@@ -28,13 +28,24 @@ class VolumeChip extends StatelessWidget {
         color: const Color.fromARGB(8, 0, 0, 0),
         clipBehavior: Clip.antiAlias,
         margin: EdgeInsets.zero,
-        child: ExpansionTile(
-          title: Text(volumeText),
-          textColor: Theme.of(context).colorScheme.secondary,
-          iconColor: Theme.of(context).colorScheme.secondary,
-          collapsedIconColor: Theme.of(context).colorScheme.secondary,
-          collapsedTextColor: Theme.of(context).colorScheme.secondary,
-          children: [buildChapters()],
+        child: ListTileTheme(
+          dense: true,
+          child: ExpansionTile(
+            title: Text(
+              volumeText,
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.secondary,
+              ),
+            ),
+            textColor: Theme.of(context).colorScheme.secondary,
+            iconColor: Theme.of(context).colorScheme.secondary,
+            collapsedIconColor: Theme.of(context).colorScheme.secondary,
+            collapsedTextColor: Theme.of(context).colorScheme.secondary,
+            children: [buildChapters()],
+          ),
         ),
       ),
     );
@@ -71,7 +82,7 @@ class VolumeChip extends StatelessWidget {
     var chapters = volume.chapters!.map((e) {
       if (e.startsWith('|')) {
         return Padding(
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
           child: Text(
             "${e.replaceAll('|', '')} arc starts here",
             style: const TextStyle(
@@ -83,7 +94,7 @@ class VolumeChip extends StatelessWidget {
         );
       } else {
         return Padding(
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
           child: Text(
             e,
             style: const TextStyle(
@@ -94,7 +105,10 @@ class VolumeChip extends StatelessWidget {
       }
     }).toList();
 
-    return SizedBox(
+    return Container(
+      decoration: const BoxDecoration(
+          color: Colors.white,
+          border: Border(top: BorderSide(color: Color.fromARGB(32, 0, 0, 0)))),
       width: double.infinity,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

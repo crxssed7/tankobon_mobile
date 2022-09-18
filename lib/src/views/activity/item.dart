@@ -8,6 +8,7 @@ import 'package:tankobon_mobile/src/api/client.dart';
 // import 'package:tankobon_mobile/src/views/widget/item_result.dart';
 import 'package:tankobon_mobile/src/views/widget/gradient_app_bar.dart';
 import 'package:tankobon_mobile/src/views/widget/volume.dart';
+import 'package:tankobon_mobile/src/views/widget/header.dart';
 
 class ItemActivity extends StatefulWidget {
   final Manga item;
@@ -66,41 +67,24 @@ class _ItemActivityState extends State<ItemActivity> {
       ),
     );
 
-    var header = Container(
-      margin: const EdgeInsets.all(25),
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            Color.fromARGB(255, 82, 185, 185),
-            Color.fromARGB(255, 82, 218, 171)
-          ],
+    var header = Header(
+      children: [
+        poster,
+        const SizedBox(
+          height: 15,
         ),
-        borderRadius: BorderRadius.all(Radius.circular(10)),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(75),
-        child: Center(
-          child: Column(
-            children: [
-              poster,
-              const SizedBox(
-                height: 15,
-              ),
-              Text(
-                widget.item.name ?? '',
-                maxLines: 4,
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).colorScheme.secondary,
-                ),
-              )
-            ],
+        Text(
+          widget.item.name ?? '',
+          maxLines: 4,
+          overflow: TextOverflow.ellipsis,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 25,
+            fontWeight: FontWeight.bold,
+            color: Theme.of(context).colorScheme.secondary,
           ),
         ),
-      ),
+      ],
     );
 
     var summary = Container(
@@ -119,7 +103,7 @@ class _ItemActivityState extends State<ItemActivity> {
               borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
             ),
             child: Padding(
-              padding: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(15.0),
               child: Text(
                 'About',
                 textAlign: TextAlign.left,
@@ -145,9 +129,9 @@ class _ItemActivityState extends State<ItemActivity> {
               ),
             ),
             child: Padding(
-              padding: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(15.0),
               child: Text(
-                widget.item.description ?? '',
+                stripHtml(widget.item.description ?? 'No description'),
                 textAlign: TextAlign.left,
                 style: TextStyle(
                   fontSize: 15,
@@ -164,7 +148,7 @@ class _ItemActivityState extends State<ItemActivity> {
                   bottom: BorderSide(color: Color.fromARGB(32, 0, 0, 0))),
             ),
             child: Padding(
-              padding: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(15.0),
               child: RichText(
                 text: TextSpan(
                     style: TextStyle(
@@ -190,7 +174,7 @@ class _ItemActivityState extends State<ItemActivity> {
                   bottom: BorderSide(color: Color.fromARGB(32, 0, 0, 0))),
             ),
             child: Padding(
-              padding: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(15.0),
               child: RichText(
                 text: TextSpan(
                     style: TextStyle(
@@ -216,7 +200,7 @@ class _ItemActivityState extends State<ItemActivity> {
                   bottom: BorderSide(color: Color.fromARGB(32, 0, 0, 0))),
             ),
             child: Padding(
-              padding: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(15.0),
               child: RichText(
                 text: TextSpan(
                     style: TextStyle(
@@ -242,7 +226,7 @@ class _ItemActivityState extends State<ItemActivity> {
                   bottom: BorderSide(color: Color.fromARGB(32, 0, 0, 0))),
             ),
             child: Padding(
-              padding: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(15.0),
               child: RichText(
                 text: TextSpan(
                     style: TextStyle(
@@ -305,7 +289,7 @@ class _ItemActivityState extends State<ItemActivity> {
           IconButton(
             onPressed: () {
               _launchUrl("https://tankobon.fly.dev/manga/${widget.item.id}/");
-            }, 
+            },
             icon: const Icon(LineIcons.globe),
           )
         ],
@@ -381,7 +365,8 @@ class _ItemActivityState extends State<ItemActivity> {
         padding: const EdgeInsets.only(right: 8.0),
         child: GestureDetector(
           onTap: () {
-            _launchUrl("https://www.mangaupdates.com/series.html?id=${widget.item.mangaupdatesId}");
+            _launchUrl(
+                "https://www.mangaupdates.com/series.html?id=${widget.item.mangaupdatesId}");
           },
           child: const Chip(
             label: Text(
@@ -403,7 +388,8 @@ class _ItemActivityState extends State<ItemActivity> {
         padding: const EdgeInsets.only(right: 8.0),
         child: GestureDetector(
           onTap: () {
-            _launchUrl("https://www.anime-planet.com/manga/${widget.item.animePlanetSlug}");
+            _launchUrl(
+                "https://www.anime-planet.com/manga/${widget.item.animePlanetSlug}");
           },
           child: const Chip(
             label: Text(
@@ -460,7 +446,7 @@ class _ItemActivityState extends State<ItemActivity> {
     }
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
@@ -475,5 +461,10 @@ class _ItemActivityState extends State<ItemActivity> {
         ),
       ),
     );
+  }
+
+  String stripHtml(String html) {
+    RegExp regExp = RegExp(r"<[^>]*>", multiLine: true, caseSensitive: true);
+    return html.replaceAll(regExp, '');
   }
 }

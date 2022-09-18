@@ -6,6 +6,7 @@ import 'package:tankobon_mobile/src/views/widget/gradient_app_bar.dart';
 import 'package:tankobon_mobile/src/api/models/models.dart';
 import 'package:tankobon_mobile/src/api/client.dart';
 import 'package:tankobon_mobile/src/views/widget/item_result.dart';
+import 'package:tankobon_mobile/src/views/widget/header.dart';
 
 class DiscoverPage extends StatefulWidget {
   const DiscoverPage({Key? key}) : super(key: key);
@@ -16,6 +17,7 @@ class DiscoverPage extends StatefulWidget {
 
 class _DiscoverPageState extends State<DiscoverPage> {
   Icon customIcon = const Icon(LineIcons.search);
+  String title = "Discover";
   Widget? customSearchBar;
   Widget? itemResults;
   final ScrollController _scrollController = ScrollController();
@@ -96,8 +98,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
     initLoad();
 
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
+      if (_scrollController.position.extentAfter < 300) {
         loadMore();
       }
     });
@@ -112,76 +113,95 @@ class _DiscoverPageState extends State<DiscoverPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: GradientAppBar(
-          leading: const Icon(LineIcons.book),
-          title: customSearchBar,
-          actions: [
-            IconButton(
-              onPressed: () {
-                setState(() {
-                  if (customIcon.icon == LineIcons.search) {
-                    // Perform set of instructions.
-                    customIcon = const Icon(Icons.clear);
-                    customSearchBar = Container(
-                      width: double.infinity,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
+      appBar: GradientAppBar(
+        leading: const Icon(LineIcons.book),
+        title: customSearchBar,
+        actions: [
+          IconButton(
+            onPressed: () {
+              setState(() {
+                if (customIcon.icon == LineIcons.search) {
+                  // Perform set of instructions.
+                  customIcon = const Icon(Icons.clear);
+                  customSearchBar = Container(
+                    width: double.infinity,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Center(
+                      child: TextField(
+                        autofocus: true,
+                        keyboardType: TextInputType.text,
+                        style: const TextStyle(
+                          color: Color.fromARGB(255, 33, 37, 41),
+                        ),
+                        decoration: const InputDecoration(
+                          hintText: 'Search...',
+                          hintStyle: TextStyle(
+                            color: Colors.black12,
+                          ),
+                          border: InputBorder.none,
+                        ),
+                        onSubmitted: (q) {
+                          // Use the new implementation
+                          query = q;
+                          offset = 0 - limit;
+                          moreResults = true;
+                          manga.clear();
+                          title = "Search results for \"$q\"";
+                          loadMore();
+                        },
                       ),
-                      child: Center(
-                        child: TextField(
-                          autofocus: true,
-                          keyboardType: TextInputType.text,
-                          style: const TextStyle(
-                            color: Color.fromARGB(255, 33, 37, 41),
-                          ),
-                          decoration: const InputDecoration(
-                            hintText: 'Search...',
-                            hintStyle: TextStyle(
-                              color: Colors.black12,
-                            ),
-                            border: InputBorder.none,
-                          ),
-                          onSubmitted: (q) {
-                            // Use the new implementation
-                            query = q;
-                            offset = 0 - limit;
-                            moreResults = true;
-                            manga.clear();
-                            loadMore();
-                          },
+                    ),
+                  );
+                } else {
+                  customIcon = const Icon(LineIcons.search);
+                  customSearchBar = const Text("Discover");
+                }
+              });
+            },
+            icon: customIcon,
+          )
+        ],
+      ),
+      backgroundColor: Theme.of(context).colorScheme.background,
+      body: firstLoad
+          ? const Center(
+              child: CircularProgressIndicator(
+                color: Color.fromARGB(255, 82, 218, 171),
+              ),
+            )
+          : SingleChildScrollView(
+              controller: _scrollController,
+              child: Column(
+                children: [
+                  Header(
+                    children: [
+                      Text(
+                        title,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).colorScheme.secondary,
                         ),
                       ),
-                    );
-                  } else {
-                    customIcon = const Icon(LineIcons.search);
-                    customSearchBar = const Text("Discover");
-                  }
-                });
-              },
-              icon: customIcon,
-            )
-          ],
-        ),
-        backgroundColor: Theme.of(context).colorScheme.background,
-        body: firstLoad
-            ? const Center(
-                child: CircularProgressIndicator(
-                  color: Color.fromARGB(255, 82, 218, 171),
-                ),
-              )
-            : Column(
-                children: [
-                  Flexible(
-                    child: GridView.builder(
-                      controller: _scrollController,
-                      gridDelegate:
-                          const SliverGridDelegateWithMaxCrossAxisExtent(
-                        maxCrossAxisExtent: 200,
-                        childAspectRatio: 2 / 3,
-                        crossAxisSpacing: 0,
-                        mainAxisSpacing: 0,
-                      ),
+                      IconButton(
+                        onPressed: () {
+
+                        }, 
+                        icon: const Icon(LineIcons.filter),
+                        color: Theme.of(context).colorScheme.secondary,
+                      )
+                    ],
+                  ),
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(left: 25, bottom: 25, right: 25),
+                    child: ListView.builder(
+                      primary: false,
+                      shrinkWrap: true,
                       itemBuilder: (_, index) => ItemResult(manga[index]),
                       itemCount: manga.length,
                     ),
@@ -196,6 +216,8 @@ class _DiscoverPageState extends State<DiscoverPage> {
                       ),
                     ),
                 ],
-              ));
+              ),
+            ),
+    );
   }
 }
