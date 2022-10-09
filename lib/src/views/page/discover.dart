@@ -196,15 +196,11 @@ class _DiscoverPageState extends State<DiscoverPage> {
                       )
                     ],
                   ),
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(left: 25, bottom: 25, right: 25),
-                    child: ListView.builder(
-                      primary: false,
-                      shrinkWrap: true,
-                      itemBuilder: (_, index) => ItemResult(manga[index]),
-                      itemCount: manga.length,
-                    ),
+                  ListView.builder(
+                    primary: false,
+                    shrinkWrap: true,
+                    itemBuilder: (_, index) => ItemResult(manga[index]),
+                    itemCount: manga.length,
                   ),
                   if (loading == true)
                     const Padding(

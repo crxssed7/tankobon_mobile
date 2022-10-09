@@ -383,7 +383,7 @@ class _ItemActivityState extends State<ItemActivity> {
 
     // AnimePlanet
     Widget? animeplanet;
-    if (widget.item.animePlanetSlug != null) {
+    if (widget.item.animePlanetSlug != null && widget.item.animePlanetSlug!.isNotEmpty) {
       animeplanet = Padding(
         padding: const EdgeInsets.only(right: 8.0),
         child: GestureDetector(

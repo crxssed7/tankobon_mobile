@@ -11,14 +11,85 @@ class ItemResult extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.all(3.5),
+    var poster = Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: SizedBox(
+        width: 104,
+        height: 160,
+        child: Card(
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          clipBehavior: Clip.antiAlias,
+          child: CachedNetworkImage(
+            imageUrl: item.poster ?? '',
+            progressIndicatorBuilder: (context, url, downloadProgress) =>
+                Center(
+                    child: CircularProgressIndicator(
+                        value: downloadProgress.progress)),
+            errorWidget: (context, url, error) => const Icon(Icons.error),
+            fit: BoxFit.cover,
+          ),
+        ),
+      ),
+    );
+
+    var details = Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+            child: Text(
+              item.name ?? '',
+              textAlign: TextAlign.left,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              softWrap: false,
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.secondary,
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
+            child: Text(
+              '${item.volumeCount} volumes',
+              textAlign: TextAlign.left,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              softWrap: false,
+              style: TextStyle(
+                fontSize: 15,
+                color: Theme.of(context).colorScheme.secondary,
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
+            child: Text(
+              item.status![0].toUpperCase() + item.status!.substring(1).toLowerCase(),
+              textAlign: TextAlign.left,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              softWrap: false,
+              style: TextStyle(
+                fontSize: 15,
+                color: Theme.of(context).colorScheme.secondary,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    return SizedBox(
+      width: double.infinity,
       child: InkWell(
-        borderRadius: BorderRadius.circular(10),
-        highlightColor: Theme.of(context).colorScheme.primary,
-        splashColor: const Color.fromARGB(255, 82, 218, 171),
         onTap: () {
-          // Get the item details
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -26,56 +97,13 @@ class ItemResult extends StatelessWidget {
             ),
           );
         },
-        child: SizedBox(
-          width: double.infinity,
-          height: 175,
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              Card(
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                clipBehavior: Clip.antiAlias,
-                child: CachedNetworkImage(
-                  imageUrl: item.banner ?? '',
-                  progressIndicatorBuilder: (context, url, downloadProgress) =>
-                      Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
-                  errorWidget: (context, url, error) => const Icon(Icons.error),
-                  fit: BoxFit.cover,
-                ),
-              ),
-              Container(
-                height: 200,
-                width: double.infinity,
-                margin: const EdgeInsets.all(3.5),
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [
-                      Color.fromARGB(0, 0, 0, 0),
-                      Color.fromARGB(175, 0, 0, 0),
-                    ],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    stops: [0, 1],
-                  ),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                alignment: AlignmentDirectional.bottomStart,
-                child: Padding(
-                  padding: const EdgeInsets.all(15),
-                  child: Text(
-                    item.name ?? '',
-                    style: const TextStyle(
-                      overflow: TextOverflow.ellipsis,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            poster,
+            details
+          ],
         ),
       ),
     );
